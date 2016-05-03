@@ -112,7 +112,7 @@ public abstract class LoaderActivity extends AppCompatActivity implements Loader
                 onLoaderResult(mLoaderRequestCode , data);
             }
         });
-
+        clearLoader();
         Log.d(TAG, "Loader of id = " + loader.getId() +  " delivered the result");
     }
 
