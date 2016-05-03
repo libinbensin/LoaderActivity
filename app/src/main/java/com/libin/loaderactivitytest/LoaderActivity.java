@@ -69,7 +69,7 @@ public abstract class LoaderActivity extends AppCompatActivity implements Loader
         return new AsyncTaskLoader<Object>(this) {
             @Override
             public Object loadInBackground() {
-                return loadDataInBackground(args);
+                return loadDataInBackground(mLoaderRequestCode , args);
             }
             @Override
             protected void onStartLoading() {
@@ -85,7 +85,6 @@ public abstract class LoaderActivity extends AppCompatActivity implements Loader
             @Override
             protected void onStopLoading() {
                 Log.d(TAG, "onStopLoading called for loader id = "  + id);
-//                cancelLoad();
             }
 
             @Override
@@ -146,10 +145,11 @@ public abstract class LoaderActivity extends AppCompatActivity implements Loader
     /**
      * Called on a worker thread to perform the actual load and to return
      * the result of the load operation.
+     * @param requestCode The request code to identify the request.
      * @param bundle The {@link Bundle} passed on the {#startLoaderForResult}
      * @return The result of the load operation.
      */
-    protected abstract Object loadDataInBackground(Bundle bundle);
+    protected abstract Object loadDataInBackground(int requestCode , Bundle bundle);
 
     /**
      * Called to deliver the result on UI Thread

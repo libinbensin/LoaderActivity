@@ -18,7 +18,7 @@ public class DetailActivity extends LoaderActivity{
     }
 
     @Override
-    protected Object loadDataInBackground(Bundle bundle) {
+    protected Object loadDataInBackground(int requestCode, Bundle bundle) {
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
