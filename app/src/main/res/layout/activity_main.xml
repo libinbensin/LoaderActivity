@@ -7,11 +7,28 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.libin.loaderactivitytest.MainActivity">
+    tools:context=".ListActivity">
+
+    <TextView
+        android:id="@+id/listTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Result show here..." />
 
     <Button
         android:id="@+id/testLoader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="LOAD LIST"
+        android:layout_below="@+id/listTextView"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"/>
+
+
+    <Button
+        android:id="@+id/testDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GO TO DETAIL"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"/>
 </RelativeLayout>
