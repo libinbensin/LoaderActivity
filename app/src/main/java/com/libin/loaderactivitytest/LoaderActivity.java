@@ -1,6 +1,7 @@
 package com.libin.loaderactivitytest;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -11,6 +12,9 @@ import android.util.Log;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * Activity to load data on worker thread using {@link AsyncTaskLoader}
+ * and deliver the result on UI Thread.
+ *
  * @author Libin
  */
 public abstract class LoaderActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks{
@@ -98,9 +102,17 @@ public abstract class LoaderActivity extends AppCompatActivity implements Loader
     }
 
     @Override
-    public void onLoadFinished(Loader loader, Object data) {
+    public void onLoadFinished(Loader loader, final Object data) {
         // deliver result
-        onLoaderResult(mLoaderRequestCode , data);
+        // Though the load finished is called on UI thread, no fragment transaction (commit or show)
+        // can be done on onLoadFinished, so running the result on a runnable.
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                onLoaderResult(mLoaderRequestCode , data);
+            }
+        });
+
         Log.d(TAG, "Loader of id = " + loader.getId() +  " delivered the result");
     }
 
@@ -113,6 +125,12 @@ public abstract class LoaderActivity extends AppCompatActivity implements Loader
         mLoaderRequestCode = -1;
     }
 
+    /**
+     * Request loader for the background callback
+     *
+     * @param requestCode The request code
+     * @param bundle The {@link Bundle} to pass on the {#on}
+     */
     protected void startLoaderForResult(int requestCode, Bundle bundle) {
         Log.d(TAG, "Restarting loader for request code = " + requestCode);
         mLoaderRequestCode = requestCode;
@@ -125,6 +143,18 @@ public abstract class LoaderActivity extends AppCompatActivity implements Loader
         return loaderId;
     }
 
+    /**
+     * Called on a worker thread to perform the actual load and to return
+     * the result of the load operation.
+     * @param bundle The {@link Bundle} passed on the {#startLoaderForResult}
+     * @return The result of the load operation.
+     */
     protected abstract Object loadDataInBackground(Bundle bundle);
+
+    /**
+     * Called to deliver the result on UI Thread
+     * @param requestCode The request code to identify the request.
+     * @param data The result of the load operation
+     */
     protected abstract void onLoaderResult(int requestCode , Object data);
 }
