@@ -131,7 +131,7 @@ public abstract class LoaderActivity extends AppCompatActivity implements Loader
      * @param requestCode The request code
      * @param bundle The {@link Bundle} to pass on the {#on}
      */
-    protected void startLoaderForResult(int requestCode, Bundle bundle) {
+    protected void startLoader(int requestCode, Bundle bundle) {
         Log.d(TAG, "Restarting loader for request code = " + requestCode);
         mLoaderRequestCode = requestCode;
         getSupportLoaderManager().restartLoader(mLoaderId , bundle , this);
@@ -147,7 +147,7 @@ public abstract class LoaderActivity extends AppCompatActivity implements Loader
      * Called on a worker thread to perform the actual load and to return
      * the result of the load operation.
      * @param requestCode The request code to identify the request.
-     * @param bundle The {@link Bundle} passed on the {#startLoaderForResult}
+     * @param bundle The {@link Bundle} passed on the {#startLoader}
      * @return The result of the load operation.
      */
     protected abstract Object loadDataInBackground(int requestCode , Bundle bundle);

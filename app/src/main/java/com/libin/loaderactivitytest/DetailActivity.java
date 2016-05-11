@@ -14,7 +14,7 @@ public class DetailActivity extends LoaderActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         showResult("Loading..");
-        startLoaderForResult(0 , null);
+        startLoader(0 , null);
     }
 
     @Override

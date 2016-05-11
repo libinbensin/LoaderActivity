@@ -15,7 +15,7 @@ public class ListActivity extends LoaderActivity {
             @Override
             public void onClick(View v) {
                 showResult("Loading..");
-                startLoaderForResult(0 , null);
+                startLoader(0 , null);
             }
         });
 
