@@ -4,10 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/detail_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="show result here"/>
-
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

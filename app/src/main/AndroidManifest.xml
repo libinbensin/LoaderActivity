@@ -17,6 +17,8 @@
         </activity>
 
         <activity android:name=".DetailActivity"/>
+
+        <activity android:name=".DetailFragmentActivity"/>
     </application>
 
 </manifest>

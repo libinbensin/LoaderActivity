@@ -19,13 +19,19 @@ public class ListActivity extends LoaderActivity {
             }
         });
 
-        findViewById(R.id.testDetail).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.test_detail_activity).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ListActivity.this , DetailActivity.class));
             }
         });
 
+        findViewById(R.id.test_detail_fragment).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ListActivity.this , DetailFragmentActivity.class));
+            }
+        });
     }
 
     @Override
@@ -46,7 +52,7 @@ public class ListActivity extends LoaderActivity {
 
     private void showResult(String result){
         // Toast.makeText(this , data.toString() , Toast.LENGTH_LONG).show();
-        TextView textView = (TextView) findViewById(R.id.listTextView);
+        TextView textView = (TextView) findViewById(R.id.list_text_view);
         textView.setText(result);
     }
 

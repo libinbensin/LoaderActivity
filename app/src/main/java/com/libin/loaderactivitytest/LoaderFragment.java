@@ -3,21 +3,18 @@ package com.libin.loaderactivitytest;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Activity to load data on worker thread using {@link AsyncTaskLoader}
- * and deliver the result on UI Thread.
- *
  * @author Libin
  */
-public abstract class LoaderActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks{
+public abstract class LoaderFragment extends Fragment implements LoaderManager.LoaderCallbacks{
 
     private static final String TAG = LoaderActivity.class.getSimpleName();
 
@@ -41,8 +38,9 @@ public abstract class LoaderActivity extends AppCompatActivity implements Loader
     private int mLoaderRequestCode = -1;
     private Bundle mLoaderBundle;
 
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if(savedInstanceState != null) {
@@ -50,7 +48,7 @@ public abstract class LoaderActivity extends AppCompatActivity implements Loader
             mLoaderBundle = savedInstanceState.getBundle(KEY_LOADER_BUNDLE);
             mLoaderRequestCode = savedInstanceState.getInt(KEY_LOADER_REQUEST_CODE);
             if(mLoaderRequestCode >= 0) {
-                getSupportLoaderManager().initLoader(mLoaderId, savedInstanceState, this);
+                getActivity().getSupportLoaderManager().initLoader(mLoaderId , savedInstanceState , this);
             }
         }else {
             mLoaderId = createUniqueLoaderId();
@@ -58,7 +56,7 @@ public abstract class LoaderActivity extends AppCompatActivity implements Loader
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(KEY_LOADER_ID , mLoaderId);
         outState.putBundle(KEY_LOADER_BUNDLE , mLoaderBundle);
@@ -67,7 +65,7 @@ public abstract class LoaderActivity extends AppCompatActivity implements Loader
 
     @Override
     public Loader onCreateLoader(final int id, final Bundle args) {
-        return new AsyncTaskLoader<Object>(this) {
+        return new AsyncTaskLoader<Object>(getContext()) {
             @Override
             public Object loadInBackground() {
                 return loadDataInBackground(mLoaderRequestCode , args);
@@ -125,22 +123,27 @@ public abstract class LoaderActivity extends AppCompatActivity implements Loader
         mLoaderRequestCode = -1;
     }
 
+    private int createUniqueLoaderId() {
+        int loaderId;
+        if(getActivity() instanceof LoaderActivity) {
+            loaderId =   ((LoaderActivity) getActivity()).createUniqueLoaderId();
+        }else {
+            loaderId = mUniqueLoaderId.incrementAndGet();
+        }
+        Log.d(TAG , "Created unique loader id = " + loaderId);
+        return loaderId;
+    }
+
     /**
      * Request loader for the background callback
      *
      * @param requestCode The request code
      * @param bundle The {@link Bundle} to pass on the {#on}
      */
-    protected void startLoaderForResult(int requestCode, Bundle bundle) {
+    protected void startLoader(int requestCode, Bundle bundle) {
         Log.d(TAG, "Restarting loader for request code = " + requestCode);
         mLoaderRequestCode = requestCode;
-        getSupportLoaderManager().restartLoader(mLoaderId , bundle , this);
-    }
-
-    public int createUniqueLoaderId() {
-        int loaderId =  mUniqueLoaderId.incrementAndGet();
-        Log.d(TAG , "Created unique loader id = " + loaderId);
-        return loaderId;
+        getActivity().getSupportLoaderManager().restartLoader(mLoaderId , bundle , this);
     }
 
     /**
