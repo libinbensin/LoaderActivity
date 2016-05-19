@@ -15,6 +15,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Activity to load data on worker thread using {@link AsyncTaskLoader}
  * and deliver the result on UI Thread.
  *
+ *  @see {@link #getLoaderManager()}
+ *  @see {@link AsyncTaskLoader}
+ *
  * @author Libin
  */
 public abstract class LoaderActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks{

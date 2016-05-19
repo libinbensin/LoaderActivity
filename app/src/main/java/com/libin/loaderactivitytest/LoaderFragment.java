@@ -12,6 +12,12 @@ import android.util.Log;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * Fragment to load data on worker thread using {@link AsyncTaskLoader}
+ * and deliver the result on UI Thread.
+ *
+ * @see {@link #getLoaderManager()}
+ * @see {@link AsyncTaskLoader}
+ *
  * @author Libin
  */
 public abstract class LoaderFragment extends Fragment implements LoaderManager.LoaderCallbacks{
@@ -48,7 +54,7 @@ public abstract class LoaderFragment extends Fragment implements LoaderManager.L
             mLoaderBundle = savedInstanceState.getBundle(KEY_LOADER_BUNDLE);
             mLoaderRequestCode = savedInstanceState.getInt(KEY_LOADER_REQUEST_CODE);
             if(mLoaderRequestCode >= 0) {
-                getActivity().getSupportLoaderManager().initLoader(mLoaderId , savedInstanceState , this);
+                getLoaderManager().initLoader(mLoaderId , savedInstanceState , this);
             }
         }else {
             mLoaderId = createUniqueLoaderId();
@@ -143,7 +149,7 @@ public abstract class LoaderFragment extends Fragment implements LoaderManager.L
     protected void startLoader(int requestCode, Bundle bundle) {
         Log.d(TAG, "Restarting loader for request code = " + requestCode);
         mLoaderRequestCode = requestCode;
-        getActivity().getSupportLoaderManager().restartLoader(mLoaderId , bundle , this);
+        getLoaderManager().restartLoader(mLoaderId , bundle , this);
     }
 
     /**
